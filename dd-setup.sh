@@ -36,6 +36,13 @@ pip3 install datadog
 # Install JMXTerm
 wget https://github.com/jiaqi/jmxterm/releases/download/v1.0.2/jmxterm-1.0.2-uber.jar
 
+# Install Spark 2.4, note that your download location may vary
+# Please follow good practices, find your location when downloading to avoid unnecessary requests to sites
+wget https://apache.osuosl.org/spark/spark-2.4.7/spark-2.4.7-bin-hadoop2.7.tgz
+tar xvf spark-2.4.7-bin-hadoop2.7.tgz
+sudo mv spark-2.4.7-bin-hadoop2.7 /opt/spark
+rm spark-2.4.7-bin-hadoop2.7.tgz
+
 # Validate Java installation
 java -version; javac -version; scala -version; git --version
 

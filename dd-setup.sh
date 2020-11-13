@@ -12,6 +12,13 @@ export DD_API_KEY=<datadog api key>
 export DD_SITE="datadoghq.com"
 export DD_AGENT_MAJOR_VERSION=7
 """ >> ~/.bashrc
+
+if [[ ${DD_API_KEY} === "<datadog api key>" ]];then
+    echo "You must provide a valid Datadog API Key see, https://app.datadoghq.com/account/settings#api"
+    echo "Once you have a valid hey, modify the bashrc file and update the API Key: vi ~/.bashrc"
+    exit 0
+fi
+
 source ~/.bashrc
 
 # Show OS version and other information

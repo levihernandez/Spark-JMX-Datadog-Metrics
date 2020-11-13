@@ -5,8 +5,6 @@ echo """
 export SPARK_HOME=/opt/spark
 export PATH=$PATH:$SPARK_HOME/bin:$SPARK_HOME/sbin
 export PYSPARK_PYTHON=/usr/bin/python3
-export SPARK_WORKER_INSTANCES=3
-export SPARK_WORKER_CORES=3
 export HOSTNAME=$(hostname)
 export DD_API_KEY=<datadog api key>
 export DD_SITE="datadoghq.com"

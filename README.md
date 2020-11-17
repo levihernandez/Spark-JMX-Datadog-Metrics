@@ -17,8 +17,9 @@ The goal of the current exercise is to present the multiple collection points fo
 * Go to Integrations > [Agent](https://app.datadoghq.com/account/settings#agent)
 * Go to Integrations > API > [API Keys](https://app.datadoghq.com/account/settings#api); create an API key that you will set for your `environment` and `datadog.yaml` configuration, this is for educational purposes and you must follow your company's policies on how to safeguard your API keys.
 
-### Prerequisites `dd-setup.sh`
+### Prerequisites `dd-env.sh` & `dd-setup.sh`
 
+* Download the [dd-env.sh](https://github.com/levihernandez/Spark-JMX-Datadog-Metrics/blob/main/dd-env.sh), make it executable and run `source ~/.bashrc` after it completes.
 * Download the [dd-setup.sh](https://github.com/levihernandez/Spark-JMX-Datadog-Metrics/blob/main/dd-setup.sh) script and make it executable. The script performs the following:
     * Updates Ubuntu
     * Installs packages

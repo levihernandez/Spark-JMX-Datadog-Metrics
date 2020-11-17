@@ -1,23 +1,12 @@
-
 # Update the DD_API_KEY variable with your valid Datadog API Key before running the dd-setup.sh script
-# Save environment variables to ~/.bashrc
-echo """
-export SPARK_HOME=/opt/spark
-export PATH=$PATH:$SPARK_HOME/bin:$SPARK_HOME/sbin
-export PYSPARK_PYTHON=/usr/bin/python3
-export HOSTNAME=$(hostname)
-export DD_API_KEY=<datadog api key>
-export DD_SITE="datadoghq.com"
-export DD_AGENT_MAJOR_VERSION=7
-""" >> ~/.bashrc
 
-if [[ ${DD_API_KEY} === "<datadog api key>" ]];then
+echo "${DD_API_KEY}, ${DD_SITE}"
+
+if [[ ${DD_API_KEY} == "<datadog api key>" ]];then
     echo "You must provide a valid Datadog API Key see, https://app.datadoghq.com/account/settings#api"
     echo "Once you have a valid hey, modify the bashrc file and update the API Key: vi ~/.bashrc"
     exit 0
 fi
-
-source ~/.bashrc
 
 # Show OS version and other information
 lsb_release -a
@@ -25,8 +14,11 @@ lsb_release -a
 # Create a workspace directory
 mkdir Workspace; cd Workspace
 
+# Update Ubuntu libraries
+sudo apt-get update
+
 # Install required packages
-sudo apt-get install openjdk-8-jdk-headless scala git -y
+sudo apt-get install openjdk-8-jdk-headless scala git python3-pip -y
 
 # Install Python PIP and modules
 pip3 install Cython
@@ -38,13 +30,15 @@ wget https://github.com/jiaqi/jmxterm/releases/download/v1.0.2/jmxterm-1.0.2-ube
 
 # Install Spark 2.4, note that your download location may vary
 # Please follow good practices, find your location when downloading to avoid unnecessary requests to sites
-wget https://apache.osuosl.org/spark/spark-2.4.7/spark-2.4.7-bin-hadoop2.7.tgz
-tar xvf spark-2.4.7-bin-hadoop2.7.tgz
-sudo mv spark-2.4.7-bin-hadoop2.7 /opt/spark
-rm spark-2.4.7-bin-hadoop2.7.tgz
+wget https://mirrors.sonic.net/apache/spark/spark-3.0.1/spark-3.0.1-bin-hadoop2.7.tgz
+tar xvf spark-3.0.1-bin-hadoop2.7.tgz
+sudo mv spark-3.0.1-bin-hadoop2.7 /opt/spark
+rm spark-3.0.1-bin-hadoop2.7.tgz
 
 # Validate Java installation
 java -version; javac -version; scala -version; git --version
+
+echo "Install Datadog ${DD_AGENT_MAJOR_VERSION}"
 
 # Install Datadog agent, quick install
 DD_AGENT_MAJOR_VERSION=${DD_AGENT_MAJOR_VERSION} DD_API_KEY=${DD_API_KEY} DD_SITE=${DD_SITE} bash -c "$(curl -L https://s3.amazonaws.com/dd-agent/scripts/install_script.sh)"
@@ -52,7 +46,7 @@ DD_AGENT_MAJOR_VERSION=${DD_AGENT_MAJOR_VERSION} DD_API_KEY=${DD_API_KEY} DD_SIT
 # Download the java tracer library, required by Spark
 wget -O dd-java-agent.jar https://dtdg.co/latest-java-tracer
 
-# Prepare Datadog YAML confs to collect logs, since we will run the PySpark in standalone mode, there is no need 
+# Prepare Datadog YAML confs to collect logs, since we will run the PySpark in standalone mode, there is no need
 # to enable the spark server configurations, where we normally should set the JMX, JAVA, and extraJavaOptions.
 sudo cp /etc/datadog-agent/conf.d/spark.d/conf.yaml.example /etc/datadog-agent/conf.d/spark.d/conf.yaml
 sudo cp /etc/datadog-agent/conf.d/jmx.d/conf.yaml.example /etc/datadog-agent/conf.d/jmx.d/conf.yaml
